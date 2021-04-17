@@ -5,7 +5,7 @@ Set-Location (Split-Path $MyInvocation.MyCommand.Path)
 
 $Version = '2.0.0.5'
 $InputFile = 'InfinityLauncher' + '.ps1'
-$OutputFile = 'InfinityLauncher' + '-old' + '.exe'
+$OutputFile = 'InfinityLauncher' + '-Old' + '.exe'
 $IconFile = 'InfinityLauncher-Icon.ico'
 $Title = $Product = $Description = 'Infinity Engine Game Launcher'
 $Copyright = 'alienquake@hotmail.com'
