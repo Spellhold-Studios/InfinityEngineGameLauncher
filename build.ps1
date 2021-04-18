@@ -10,5 +10,5 @@ $IconFile = 'InfinityLauncher-Icon.ico'
 $Title = $Product = $Description = 'Infinity Engine Game Launcher'
 $Copyright = 'alienquake@hotmail.com'
 
-# PS2EXE v0.5.0.0
-.\ps2exe.ps1 -Runtime20 -NoConsole -NoOutput -NoError -x86 -Version $Version -Title $Title -Description $Description -Product $Product -Copyright $Copyright -InputFile $InputFile -OutputFile $OutputFile -IconFile $IconFile
+# PS2EXE v0.5.0.0, new version are missing -Runtime20 switch
+.\ps2exe.ps1 -NoConsole -NoOutput -NoError -x86 -Runtime20 -Version $Version -Title $Title -Description $Description -Product $Product -Copyright $Copyright -InputFile $InputFile -OutputFile $OutputFile -IconFile $IconFile
