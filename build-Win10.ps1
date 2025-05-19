@@ -1,6 +1,6 @@
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
+Set-Location $PSScriptRoot
 
-# If module is imported say that and do nothing
+# If module is imported we are good to go
 if (Get-Module | Where-Object Name -eq 'ps2exe') {
     # If module is not imported, but available on disk then import
 } elseif (Get-Module -ListAvailable | Where-Object Name -eq 'ps2exe') {
@@ -8,6 +8,8 @@ if (Get-Module | Where-Object Name -eq 'ps2exe') {
 } else {
     # If module is not imported, not available on disk, but is in online gallery then install and import
     if (Find-Module -Name 'ps2exe' | Where-Object Name -eq 'ps2exe' ) {
+        Remove-Module PowerShellGet
+        Import-Module "C:\Program Files\WindowsPowerShell\Modules\PowerShellGet\1.0.0.1\PowerShellGet.psd1"
         Install-Module -Name 'ps2exe' -Scope CurrentUser -Force | Out-Null
         Import-Module 'ps2exe' -Force | Out-Null
     } else {
@@ -17,14 +19,17 @@ if (Get-Module | Where-Object Name -eq 'ps2exe') {
     }
 }
 
-Set-Location $PSScriptRoot
+$Config = Import-PowerShellDataFile -Path "$PSScriptRoot\BuildConfig.psd1"
 
-$Version = '2.0.0.5'
-$InputFile = 'InfinityLauncher' + '.ps1'
-$OutputFile = 'InfinityLauncher' + '-New' + '.exe'
-$IconFile = 'InfinityLauncher-Icon.ico'
-$Title = $Product = $Description = 'Infinity Engine Game Launcher'
-$Copyright = 'alienquake@hotmail.com'
+$OutputFile = 'InfinityLauncher.exe'
 
-# New PS2EXE-GUI v0.5.0.26
-Invoke-PS2exe -NoConsole -NoOutput -NoError -x86 -Version $Version -Title $Title -Description $Description -Product $Product -Copyright $Copyright -InputFile $InputFile -OutputFile $OutputFile -IconFile $IconFile
+# New command from ps2exe module
+Invoke-PS2exe -winFormsDPIAware -lcid 1033 -NoConsole -NoOutput -NoError -x86 `
+    -Version $Config.Version `
+    -Title $Config.Title `
+    -Description $Config.Description `
+    -Product $Config.Product `
+    -Copyright $Config.Copyright `
+    -InputFile $Config.InputFile `
+    -IconFile $Config.IconFile `
+    -OutputFile $OutputFile

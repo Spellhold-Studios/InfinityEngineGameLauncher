@@ -1,14 +1,24 @@
-Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process -Force
-
 
 Set-Location (Split-Path $MyInvocation.MyCommand.Path)
 
-$Version = '2.0.0.5'
-$InputFile = 'InfinityLauncher' + '.ps1'
-$OutputFile = 'InfinityLauncher' + '-Old' + '.exe'
-$IconFile = 'InfinityLauncher-Icon.ico'
-$Title = $Product = $Description = 'Infinity Engine Game Launcher'
-$Copyright = 'alienquake@hotmail.com'
+# At beginning of .ps1
+if ($PSVersionTable.PSVersion.Major -ne 5 -and $PSVersionTable.PSVersion.Minor -ne 1 ) {
+  # Re-launch as version 5 if we're not already
+  Write-Host "This script requires PowerShell 5.1."
+  exit
+}
 
-# PS2EXE v0.5.0.0, new version are missing -Runtime20 switch
-.\ps2exe.ps1 -NoConsole -NoOutput -NoError -x86 -Runtime20 -Version $Version -Title $Title -Description $Description -Product $Product -Copyright $Copyright -InputFile $InputFile -OutputFile $OutputFile -IconFile $IconFile
+$Config = Import-PowerShellDataFile -Path "$PSScriptRoot\BuildConfig.psd1"
+
+$OutputFile = 'InfinityLauncher' + '-Old' + '.exe'
+
+# using old PS2EXE v0.5.0.0 because new version are missing -Runtime20 switch
+& ".\build-ps2exe-v0.5.0.0.ps1" -NoConsole -NoOutput -NoError -x86 -Runtime20 `
+    -Version $Config.Version `
+    -Title $Config.Title `
+    -Description $Config.Description `
+    -Product $Config.Product `
+    -Copyright $Config.Copyright `
+    -InputFile $Config.InputFile `
+    -IconFile $Config.IconFile `
+    -OutputFile $OutputFile
